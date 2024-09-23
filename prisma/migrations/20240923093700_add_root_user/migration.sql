@@ -1,0 +1,1 @@
+INSERT INTO User (id, createdAt, updatedAt, email, login) values ('ROOT', '2024-09-23', '2024-09-03', 'root@hexagonart.com', 'root');

@@ -1,0 +1,90 @@
+type Board {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  tiles: [Tile!]!
+  authorId: String!
+  author: User
+}
+
+type Tile {
+  id: ID!
+  boardId: String!
+  a: Int
+  r: Int
+  c: Int
+  lastColorTileEvent: ColorEvent
+  colorEvents: [ColorEvent!]!
+}
+
+type ColorEvent {
+  id: Int!
+  createdAt: DateTime!
+  tileId: String!
+  userId: String!
+  user: User!
+  r: Int!
+  g: Int!
+  b: Int!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  login: String! 
+  colorEvents: [ColorEvent!]!
+  boards: [Board!]!
+}
+
+type Query {
+  board(id: ID!): Board
+  tile(id: ID!): Tile
+}
+
+type Subscription {
+  colorEvent(boardId: ID!): ColorEvent
+}
+
+type Mutation {
+  createBoard(input: CreateBoardInput!): CreateBoardResponse!
+  deleteBoard(input: DeleteBoardInput!): DeleteBoardResponse!
+  colorTile(input: ColorTileInput!): ColorTileResponse!
+}
+
+input CreateBoardInput {
+  name: String!
+}
+
+input ColorTileInput {
+  tileId: ID! 
+  r: Int!
+  g: Int!
+  b: Int!
+}
+
+input DeleteBoardInput {
+  id: ID!
+}
+
+type CreateBoardResponse {
+  success: Boolean!
+  message: String!
+  board: Board
+}
+
+type ColorTileResponse {
+  success: Boolean!
+  message: String!
+  colorEvent: ColorEvent
+}
+
+type DeleteBoardResponse {
+  success: Boolean!
+  message: String!
+  id: ID!
+}
+
+scalar DateTime

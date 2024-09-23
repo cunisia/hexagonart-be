@@ -1,0 +1,13 @@
+schema: ./src/schema.graphql
+generates:
+  ./src/types.ts:
+    config:
+      contextType: ./context#DataSourceContext
+      mappers:
+        Board: ./model#BoardModel,
+        Tile: ./model#TileModel,
+        ColorEvent: ./model#ColorEventModel,
+        User: ./model#UserModel,
+    plugins:
+      - typescript
+      - typescript-resolvers

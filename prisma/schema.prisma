@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Board {
+  id String   @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  tiles       Tile[]
+  authorId    String
+  author      User @relation(fields: authorId, references: id)
+}
+
+model Tile {
+  id      String @id @default(uuid())
+  boardId String
+  board   Board @relation(fields: [boardId], references: [id])
+  colorEvents ColorEvent[]
+  a Int
+  r Int
+  c Int
+  @@unique([boardId, a, r, c], name: "unique_coordinates_on_board")
+}
+
+model ColorEvent {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime   @default(now())
+    tileId      String 
+    tile        Tile @relation(fields: [tileId], references: [id])
+    userId      String
+    user        User @relation(fields: [userId], references: [id])
+    r           Int
+    g           Int
+    b           Int
+
+}
+
+model User {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  login     String
+  colorEvents    ColorEvent[]
+  boards    Board[]
+}
